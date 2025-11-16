@@ -1,0 +1,361 @@
+// Surgical Research Platform Database Schema
+// Medical education and research platform for Professor Sergey Sushkov
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/surgical_research_platform/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Core User Management
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  name          String?
+  fullName      String?
+  role          UserRole  @default(STUDENT)
+  specialization String?
+  institution   String?
+  bio           String?
+  avatar        String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+
+  // NextAuth relations
+  accounts Account[]
+  sessions Session[]
+
+  // Platform relations
+  courses          Course[]         @relation("CourseAuthor")
+  enrollments      Enrollment[]
+  progress         Progress[]
+  articles         Article[]
+  comments         Comment[]
+  bookmarks        Bookmark[]
+  fhirResources    FHIRResource[]
+  chatSessions     ChatSession[]
+  
+  @@map("users")
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+// Course Management
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?
+  icon        String?
+  parentId    String?
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  courses     Course[]
+  articles    Article[]
+  createdAt   DateTime @default(now())
+  
+  @@map("categories")
+}
+
+model Course {
+  id              String       @id @default(cuid())
+  title           String
+  slug            String       @unique
+  description     String
+  shortDescription String?
+  coverImage      String?
+  difficulty      Difficulty   @default(BEGINNER)
+  duration        Int?         // in hours
+  price           Float?       @default(0)
+  published       Boolean      @default(false)
+  featured        Boolean      @default(false)
+  authorId        String
+  categoryId      String
+  prerequisites   String?
+  learningObjectives String[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  author       User           @relation("CourseAuthor", fields: [authorId], references: [id])
+  category     Category       @relation(fields: [categoryId], references: [id])
+  lessons      Lesson[]
+  enrollments  Enrollment[]
+  progress     Progress[]
+  tags         CourseTag[]
+  comments     Comment[]
+  bookmarks    Bookmark[]
+  
+  @@map("courses")
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Lesson {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String
+  description String?
+  content     String?     @db.Text
+  videoUrl    String?
+  duration    Int?        // in minutes
+  order       Int
+  published   Boolean     @default(true)
+  courseId    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress    LessonProgress[]
+  
+  @@unique([courseId, order])
+  @@map("lessons")
+}
+
+model Enrollment {
+  id           String   @id @default(cuid())
+  userId       String
+  courseId     String
+  enrolledAt   DateTime @default(now())
+  completedAt  DateTime?
+  progress     Float    @default(0) // percentage 0-100
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model Progress {
+  id              String   @id @default(cuid())
+  userId          String
+  courseId        String
+  completedLessons Int     @default(0)
+  totalLessons    Int     @default(0)
+  progressPercentage Float @default(0)
+  lastAccessedAt  DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course          Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessonProgress  LessonProgress[]
+  
+  @@unique([userId, courseId])
+  @@map("progress")
+}
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  progressId  String
+  lessonId    String
+  completed   Boolean  @default(false)
+  timeSpent   Int?     // in seconds
+  completedAt DateTime?
+
+  progress    Progress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  
+  @@unique([progressId, lessonId])
+  @@map("lesson_progress")
+}
+
+// Content Management
+model Article {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  content     String       @db.Text
+  excerpt     String?
+  coverImage  String?
+  published   Boolean      @default(false)
+  featured    Boolean      @default(false)
+  readTime    Int?         // estimated read time in minutes
+  authorId    String
+  categoryId  String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  publishedAt DateTime?
+
+  author      User         @relation(fields: [authorId], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
+  tags        ArticleTag[]
+  comments    Comment[]
+  bookmarks   Bookmark[]
+  
+  @@map("articles")
+}
+
+model Tag {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  color       String?
+  createdAt   DateTime     @default(now())
+
+  courses     CourseTag[]
+  articles    ArticleTag[]
+  
+  @@map("tags")
+}
+
+model CourseTag {
+  courseId    String
+  tagId       String
+
+  course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tag         Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([courseId, tagId])
+  @@map("course_tags")
+}
+
+model ArticleTag {
+  articleId   String
+  tagId       String
+
+  article     Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag         Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([articleId, tagId])
+  @@map("article_tags")
+}
+
+// Community Features
+model Comment {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  authorId    String
+  courseId    String?
+  articleId   String?
+  parentId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  course      Course?   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  article     Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[] @relation("CommentReplies")
+  
+  @@map("comments")
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String?
+  articleId String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+  @@unique([userId, articleId])
+  @@map("bookmarks")
+}
+
+// FHIR Integration
+model FHIRResource {
+  id           String    @id @default(cuid())
+  resourceType String    // Patient, Procedure, Observation, etc.
+  fhirId       String?   // FHIR resource ID
+  data         Json      // FHIR resource data
+  status       String?
+  authorId     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  syncedAt     DateTime?
+
+  author       User      @relation(fields: [authorId], references: [id])
+  
+  @@map("fhir_resources")
+}
+
+// AI/ML Features
+model ChatSession {
+  id          String        @id @default(cuid())
+  userId      String
+  title       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages    ChatMessage[]
+  
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id          String      @id @default(cuid())
+  sessionId   String
+  role        MessageRole
+  content     String      @db.Text
+  metadata    Json?       // Additional context, sources, etc.
+  createdAt   DateTime    @default(now())
+
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("chat_messages")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
