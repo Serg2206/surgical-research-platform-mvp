@@ -86,11 +86,6 @@ model User {
   @@map("users")
 }
 
-enum UserRole {
-  STUDENT
-  TEACHER
-  ADMIN
-}
 
 // Course Management
 model Category {
