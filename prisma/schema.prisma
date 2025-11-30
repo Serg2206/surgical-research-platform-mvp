@@ -15,6 +15,8 @@ datasource db {
 enum UserRole {
   USER
   ADMIN
+  STUDENT
+  TEACHER
 }
 model Account {
   id                String  @id @default(cuid())
