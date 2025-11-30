@@ -13,6 +13,10 @@ datasource db {
 }
 
 // NextAuth.js required models
+enum UserRole {
+  USER
+  ADMIN
+}
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -55,7 +59,7 @@ model User {
   password      String?
   name          String?
   fullName      String?
-  role          UserRole  @default(STUDENT)
+  role  UserRole @default(USER)
   specialization String?
   institution   String?
   bio           String?
