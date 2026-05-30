@@ -74,20 +74,21 @@ function getMetadata(fileSlug: string): JournalMetadata {
 }
 
 /**
- * Find the markdown file by frontmatter slug
+ * Find the markdown file by frontmatter slug.
  */
 function findFileBySlug(slug: string): string | null {
   if (!fs.existsSync(JOURNAL_DIR)) return null
   
   const files = fs.readdirSync(JOURNAL_DIR).filter((f) => f.endsWith('.md'))
   
+  // 1. Exact match on frontmatter slug
   for (const file of files) {
     const raw = fs.readFileSync(path.join(JOURNAL_DIR, file), 'utf-8')
     const { data } = matter(raw)
     if (data.slug === slug) return file
   }
   
-  // Fallback: match by filename
+  // 2. Exact match by filename
   const direct = `${slug}.md`
   if (files.includes(direct)) return direct
   
