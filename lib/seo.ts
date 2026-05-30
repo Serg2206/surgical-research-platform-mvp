@@ -6,9 +6,6 @@ const SITE_URL =
 
 const SITE_NAME = 'SSVproff Surgical Research Platform'
 
-const TWITTER_HANDLE =
-  process.env.NEXT_PUBLIC_TWITTER_HANDLE || '@SaleemHamilah'
-
 const DEFAULT_LOCALE = 'ru_RU'
 
 /** Default OG image — used when no article-specific image exists */
@@ -151,8 +148,6 @@ export function generateJournalMeta(data: JournalMetaInput): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      site: TWITTER_HANDLE,
-      creator: TWITTER_HANDLE,
       title: data.title,
       description,
       images: [ogImageUrl],

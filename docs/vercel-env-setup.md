@@ -7,20 +7,18 @@
 | Переменная | Значение | Описание |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | `https://proffssv.site` | Базовый URL сайта для canonical, OG, sitemap |
-| `NEXT_PUBLIC_TWITTER_HANDLE` | `@SaleemHamilah` | Twitter/X аккаунт для Twitter Card |
 
 ## Как добавить в Vercel Dashboard
 
 1. Откройте [Vercel Dashboard](https://vercel.com/dashboard)
 2. Выберите проект **surgical-research-platform-mvp**
 3. Перейдите в **Settings** → **Environment Variables**
-4. Для каждой переменной:
-   - Нажмите **Add New**
-   - Введите **Key** (например `NEXT_PUBLIC_SITE_URL`)
-   - Введите **Value** (например `https://proffssv.site`)
+4. Нажмите **Add New**
+   - **Key:** `NEXT_PUBLIC_SITE_URL`
+   - **Value:** `https://proffssv.site`
    - Выберите среды: ✅ Production, ✅ Preview, ✅ Development
    - Нажмите **Save**
-5. После добавления всех переменных → **Deployments** → **Redeploy** последний деплой
+5. → **Deployments** → **Redeploy** последний деплой
 
 > **Важно:** Переменные с префиксом `NEXT_PUBLIC_` доступны в клиентском коде.
 > Переменные без этого префикса доступны только на сервере.
@@ -30,7 +28,6 @@
 ```env
 # SEO (обязательно для корректных мета-тегов)
 NEXT_PUBLIC_SITE_URL=https://proffssv.site
-NEXT_PUBLIC_TWITTER_HANDLE=@SaleemHamilah
 
 # NextAuth.js
 NEXTAUTH_SECRET=<ваш-секретный-ключ>
