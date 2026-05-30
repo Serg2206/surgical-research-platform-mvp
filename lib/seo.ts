@@ -15,8 +15,7 @@ const DEFAULT_LOCALE = 'ru_RU'
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 const PUBLISHER = {
-  name: 'Витебский государственный медицинский университет',
-  department: 'Кафедра общей хирургии',
+  name: 'SSVproff Journal',
   url: SITE_URL,
 }
 
