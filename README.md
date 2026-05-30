@@ -1,215 +1,64 @@
+# 🏥 SSVproff — Surgical Research Platform
 
-# 🏥 Surgical Research Platform MVP
+> **Канонический репозиторий** платформы хирургических исследований проф. Шаповалова В.В.
+> Новые репозитории НЕ создаём — вся разработка идёт здесь.
 
-Современная веб-платформа для хирургического образования и научных исследований с интеграцией AI/ML и стандарта FHIR.
-
-## 📋 Описание
-
-Surgical Research Platform - это MVP веб-приложение, созданное для профессора Сергея Валентиновича Сушкова, предоставляющее комплексное решение для хирургического образования, научных исследований и обмена медицинскими знаниями.
-
-## ✨ Основные функции
-
-### 🎓 Образовательный контент
-- **Система курсов** с категориями: гастроэнтерология, онкология, общая хирургия, экстренная хирургия
-- **Детальные уроки** с прогрессом обучения
-- **База научных статей** с тегами и категориями
-- **Фильтрация** по сложности и тематике
-
-### 🤖 AI/ML Функциональность
-- **Интеллектуальный поиск** с семантическим пониманием запросов
-- **AI-чат** для консультаций по хирургическим вопросам
-- **Потоковый интерфейс** для реал-тайм ответов
-- **Рекомендательная система** курсов
-
-### 🏥 FHIR Интеграция
-- Работа со стандартом **FHIR R4**
-- Примеры ресурсов: Patient, Procedure, Observation
-- API для обмена медицинскими данными
-- Визуализация FHIR данных
-
-### 🔐 Система аутентификации
-- Регистрация и вход через email/пароль
-- **Роли пользователей**: студент, преподаватель, администратор
-- Защищенные маршруты и API endpoints
-- Профили пользователей
-
-### 👥 Административные функции
-- Управление пользователями
-- Создание и редактирование курсов
-- Аналитика и статистика
-- Модерация контента
-
-## 🛠 Технологический стек
-
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **Backend**: Next.js API Routes, NextAuth.js
-- **База данных**: PostgreSQL с Prisma ORM
-- **AI/ML**: Abacus.AI LLM API
-- **Стили**: Tailwind CSS, Shadcn/ui
-- **Аутентификация**: NextAuth.js
-
-## 🚀 Установка и запуск
-
-### Предварительные требования
-- Node.js 18+ и Yarn
-- PostgreSQL 14+
-- API ключи для LLM (Abacus.AI)
-
-### Шаги установки
-
-1. **Клонируйте репозиторий**
-```bash
-git clone https://github.com/Serg2206/surgical-research-platform-mvp.git
-cd surgical-research-platform-mvp
-```
-
-2. **Установите зависимости**
-```bash
-yarn install
-```
-
-3. **Настройте переменные окружения**
-Создайте файл `.env` со следующими переменными:
-```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/surgical_platform"
-
-# NextAuth
-NEXTAUTH_SECRET="your-secret-key-here"
-NEXTAUTH_URL="http://localhost:3000"
-
-# LLM API (Abacus.AI)
-ABACUSAI_API_KEY="your-api-key-here"
-
-# Cloud Storage (если используется)
-AWS_BUCKET_NAME="your-bucket-name"
-AWS_FOLDER_PREFIX="surgical-platform/"
-```
-
-4. **Инициализируйте базу данных**
-```bash
-yarn prisma generate
-yarn prisma db push
-yarn prisma db seed
-```
-
-5. **Запустите приложение**
-```bash
-yarn dev
-```
-
-Приложение будет доступно по адресу: http://localhost:3000
-
-## 👤 Тестовые аккаунты
-
-Для демонстрации доступны следующие тестовые аккаунты:
-
-- **Администратор**
-  - Email: `prof.sushkov@surgical-platform.com`
-  - Пароль: `admin123`
-
-- **Преподаватель**
-  - Email: `teacher1@surgical-platform.com`
-  - Пароль: `teacher123`
-
-- **Студент**
-  - Email: `student1@surgical-platform.com`
-  - Пароль: `student123`
-
-- **Тестовый**
-  - Email: `john@doe.com`
-  - Пароль: `johndoe123`
-
-## 📁 Структура проекта
-
-```
-surgical-research-platform-mvp/
-├── app/                      # Next.js 14 App Router
-│   ├── api/                  # API маршруты
-│   │   ├── ai-search/        # AI поиск
-│   │   ├── auth/             # Аутентификация
-│   │   ├── courses/          # API курсов
-│   │   └── fhir/             # FHIR интеграция
-│   ├── courses/              # Страницы курсов
-│   ├── articles/             # Страницы статей
-│   ├── ai-search/            # AI поиск страница
-│   ├── fhir/                 # FHIR страница
-│   ├── dashboard/            # Дашборд
-│   ├── admin/                # Админ панель
-│   └── auth/                 # Страницы входа/регистрации
-├── components/               # React компоненты
-│   ├── layout/               # Компоненты макета
-│   ├── pages/                # Страничные компоненты
-│   ├── providers/            # Провайдеры (Auth, Theme)
-│   └── ui/                   # UI компоненты (Shadcn)
-├── lib/                      # Утилиты и хелперы
-│   ├── auth.ts               # Конфигурация NextAuth
-│   ├── db.ts                 # Prisma клиент
-│   ├── types.ts              # TypeScript типы
-│   └── utils.ts              # Утилиты
-├── prisma/                   # Prisma схема и миграции
-│   └── schema.prisma         # Схема базы данных
-├── public/                   # Статические файлы
-├── scripts/                  # Скрипты (seed, etc.)
-└── types/                    # Глобальные типы TypeScript
-```
-
-## 🔒 Безопасность
-
-- Все пароли хешируются с использованием bcrypt
-- Защищенные API endpoints с проверкой аутентификации
-- Роль-базированный контроль доступа (RBAC)
-- HTTPS для production окружения
-- Соответствие медицинским стандартам безопасности данных
-
-## 🚦 Roadmap
-
-### Фаза 1 (Завершена) ✅
-- [x] Базовая структура приложения
-- [x] Система аутентификации
-- [x] CRUD для курсов и статей
-- [x] AI поиск и чат
-- [x] FHIR интеграция (базовая)
-- [x] Административная панель
-
-### Фаза 2 (Планируется)
-- [ ] Видео-контент и 3D визуализации
-- [ ] Расширенная FHIR интеграция
-- [ ] Система тестирования и сертификации
-- [ ] Форум и комментарии
-- [ ] Мобильное приложение
-- [ ] Интеграция с медицинскими системами (EHR)
-
-### Фаза 3 (Будущее)
-- [ ] Виртуальная реальность для симуляций
-- [ ] Расширенная AI аналитика
-- [ ] Международная локализация
-- [ ] Интеграция с телемедициной
-
-## 📄 Лицензия
-
-MIT License - см. файл [LICENSE](LICENSE) для деталей.
-
-## 👨‍⚕️ Автор
-
-**Профессор Сергей Валентинович Сушков**
-- GitHub: [@Serg2206](https://github.com/Serg2206)
-- 40+ лет опыта в хирургии
-- Специализация: гастроэнтерология, онкология, общая хирургия
-
-## 🤝 Вклад
-
-Приветствуются любые предложения по улучшению платформы! Пожалуйста:
-1. Форкните репозиторий
-2. Создайте feature branch (`git checkout -b feature/AmazingFeature`)
-3. Закоммитьте изменения (`git commit -m 'Add some AmazingFeature'`)
-4. Запушьте в branch (`git push origin feature/AmazingFeature`)
-5. Откройте Pull Request
-
-## 📞 Поддержка
-
-Если у вас есть вопросы или предложения, пожалуйста, создайте [Issue](https://github.com/Serg2206/surgical-research-platform-mvp/issues) в репозитории.
+🌐 **Продакшн:** [proffssv.site](https://proffssv.site)
+🚀 **Preview:** [surgical-research-platform-mvp.vercel.app](https://surgical-research-platform-mvp.vercel.app)
 
 ---
 
-**Создано с ❤️ для медицинского сообщества**
+## Стек
+
+| Слой | Технологии |
+|------|-----------|
+| Frontend | Next.js · TypeScript · Tailwind CSS |
+| Backend | Next.js API Routes · Prisma ORM |
+| База данных | PostgreSQL (Neon / Supabase) |
+| AI/ML | Python · scikit-learn · TensorFlow |
+| Медицина | FHIR R4 · HL7 |
+| Деплой | Vercel · GitHub Actions |
+
+---
+
+## Структура монорепо
+
+```
+/api          # Backend API (FastAPI или Next.js API routes)
+/web          # Frontend Next.js static export
+/ai           # ML-модели прогноза риска
+/tools        # Утилиты (video, book, monetization generators)
+/flows        # Рабочие процессы и автоматизации
+/data-meta    # Метаданные, схемы, миграции
+/docs         # Документация
+```
+
+---
+
+## Быстрый старт
+
+```bash
+# Клонировать
+git clone https://github.com/Serg2206/surgical-research-platform-mvp.git
+cd surgical-research-platform-mvp
+
+# Установить зависимости
+npm install
+
+# Настроить окружение
+cp .env.example .env.local
+
+# Запустить dev-сервер
+npm run dev
+```
+
+---
+
+## Лицензия
+
+MIT © 2024–2026 Prof. Shapovalov V.V. (SSVproff)
+
+---
+
+> 📌 **Правило:** Этот репозиторий — единственная точка входа для всей платформы SSVproff.
+> Не создавайте новые репозитории. Всё добавляем сюда.
