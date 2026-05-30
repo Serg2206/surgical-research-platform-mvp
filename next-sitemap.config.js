@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://proffssv.site',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://proffssv.site',
   generateRobotsTxt: true,
   generateIndexSitemap: false,
 

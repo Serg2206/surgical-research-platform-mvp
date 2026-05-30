@@ -1,10 +1,18 @@
 import type { Metadata } from 'next'
 
-// ─── Constants ───────────────────────────────────────────────
-const SITE_URL = 'https://proffssv.site'
+// ─── Constants (env-aware with safe fallbacks) ───────────────
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://proffssv.site'
+
 const SITE_NAME = 'SSVproff Surgical Research Platform'
-const TWITTER_HANDLE = '@SaleemHamilah'
+
+const TWITTER_HANDLE =
+  process.env.NEXT_PUBLIC_TWITTER_HANDLE || '@SaleemHamilah'
+
 const DEFAULT_LOCALE = 'ru_RU'
+
+/** Default OG image — used when no article-specific image exists */
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 const PUBLISHER = {
   name: 'Витебский государственный медицинский университет',
@@ -17,7 +25,7 @@ const PUBLISHER = {
 export interface JournalMetaInput {
   /** Article title */
   title: string
-  /** URL slug (will be optimized if too long) */
+  /** URL slug */
   slug: string
   /** ISO date string (YYYY-MM-DD) */
   date: string
@@ -31,6 +39,8 @@ export interface JournalMetaInput {
   doi?: string | null
   /** Reading time in minutes */
   readingTime?: number
+  /** Article-specific OG image URL (optional, falls back to default) */
+  ogImage?: string | null
 }
 
 export interface JsonLdArticle {
@@ -52,7 +62,27 @@ export interface JsonLdArticle {
   }
   inLanguage: string
   isAccessibleForFree: boolean
+  image?: string
   wordCount?: number
+}
+
+// ─── Helpers ─────────────────────────────────────────────────
+
+/**
+ * Resolve the OG image URL.
+ * If `imageUrl` is a relative path, prepend SITE_URL.
+ * Falls back to the default OG image.
+ */
+function resolveOgImage(imageUrl?: string | null): string {
+  if (!imageUrl) return DEFAULT_OG_IMAGE
+
+  // Already absolute
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl
+  }
+
+  // Relative → absolute
+  return `${SITE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`
 }
 
 // ─── optimizeSlug ────────────────────────────────────────────
@@ -61,8 +91,8 @@ export interface JsonLdArticle {
  * Trim a slug to `maxLength` characters on a word (hyphen) boundary.
  *
  * Examples:
- *   optimizeSlug('sepsis-in-surgery-pathophysiology-contemporary-management-an', 40)
- *   → 'sepsis-in-surgery-pathophysiology'
+ *   optimizeSlug('some-very-long-slug-that-exceeds-sixty-characters-limit-here', 40)
+ *   → 'some-very-long-slug-that-exceeds'
  */
 export function optimizeSlug(slug: string, maxLength = 60): string {
   if (slug.length <= maxLength) return slug
@@ -70,7 +100,6 @@ export function optimizeSlug(slug: string, maxLength = 60): string {
   const trimmed = slug.slice(0, maxLength)
   const lastHyphen = trimmed.lastIndexOf('-')
 
-  // If there's a reasonable hyphen boundary, cut there
   if (lastHyphen > maxLength * 0.4) {
     return trimmed.slice(0, lastHyphen)
   }
@@ -82,11 +111,11 @@ export function optimizeSlug(slug: string, maxLength = 60): string {
 
 /**
  * Build full Next.js 14 `Metadata` for a journal article page.
- * Includes title, description, Open Graph, Twitter Card, canonical URL.
+ * Reads SITE_URL / TWITTER_HANDLE from env (set in .env or Vercel Dashboard).
  */
 export function generateJournalMeta(data: JournalMetaInput): Metadata {
-  const canonicalSlug = optimizeSlug(data.slug)
-  const canonicalUrl = `${SITE_URL}/journal/${canonicalSlug}`
+  const canonicalUrl = `${SITE_URL}/journal/${data.slug}`
+  const ogImageUrl = resolveOgImage(data.ogImage)
 
   const description =
     data.abstract.length > 160
@@ -113,7 +142,7 @@ export function generateJournalMeta(data: JournalMetaInput): Metadata {
       tags: data.tags,
       images: [
         {
-          url: `${SITE_URL}/og-image.png`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: data.title,
@@ -126,7 +155,7 @@ export function generateJournalMeta(data: JournalMetaInput): Metadata {
       creator: TWITTER_HANDLE,
       title: data.title,
       description,
-      images: [`${SITE_URL}/og-image.png`],
+      images: [ogImageUrl],
     },
     robots: {
       index: true,
@@ -148,8 +177,8 @@ export function generateJournalMeta(data: JournalMetaInput): Metadata {
  * Build a JSON-LD structured data object for schema.org MedicalScholarlyArticle.
  */
 export function generateArticleJsonLd(data: JournalMetaInput): JsonLdArticle {
-  const canonicalSlug = optimizeSlug(data.slug)
-  const canonicalUrl = `${SITE_URL}/journal/${canonicalSlug}`
+  const canonicalUrl = `${SITE_URL}/journal/${data.slug}`
+  const ogImageUrl = resolveOgImage(data.ogImage)
 
   return {
     '@context': 'https://schema.org',
@@ -162,6 +191,7 @@ export function generateArticleJsonLd(data: JournalMetaInput): JsonLdArticle {
     datePublished: data.date,
     abstract: data.abstract,
     keywords: data.tags,
+    image: ogImageUrl,
     publisher: {
       '@type': 'Organization',
       name: PUBLISHER.name,
@@ -173,11 +203,9 @@ export function generateArticleJsonLd(data: JournalMetaInput): JsonLdArticle {
     },
     inLanguage: 'ru',
     isAccessibleForFree: true,
-    ...(data.readingTime
-      ? { wordCount: data.readingTime * 200 }
-      : {}),
+    ...(data.readingTime ? { wordCount: data.readingTime * 200 } : {}),
   }
 }
 
 // ─── Exports ─────────────────────────────────────────────────
-export { SITE_URL, SITE_NAME, PUBLISHER }
+export { SITE_URL, SITE_NAME, PUBLISHER, DEFAULT_OG_IMAGE }
