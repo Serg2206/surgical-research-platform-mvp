@@ -74,22 +74,35 @@ function getMetadata(fileSlug: string): JournalMetadata {
 }
 
 /**
- * Find the markdown file by frontmatter slug
+ * Find the markdown file by frontmatter slug.
+ * Supports exact match and prefix match (for optimized/shortened slugs).
  */
 function findFileBySlug(slug: string): string | null {
   if (!fs.existsSync(JOURNAL_DIR)) return null
   
   const files = fs.readdirSync(JOURNAL_DIR).filter((f) => f.endsWith('.md'))
   
+  // 1. Exact match on frontmatter slug
   for (const file of files) {
     const raw = fs.readFileSync(path.join(JOURNAL_DIR, file), 'utf-8')
     const { data } = matter(raw)
     if (data.slug === slug) return file
   }
   
-  // Fallback: match by filename
+  // 2. Exact match by filename
   const direct = `${slug}.md`
   if (files.includes(direct)) return direct
+  
+  // 3. Prefix match — supports shortened/optimized slugs (SEO redirects)
+  for (const file of files) {
+    const raw = fs.readFileSync(path.join(JOURNAL_DIR, file), 'utf-8')
+    const { data } = matter(raw)
+    if (data.slug && data.slug.startsWith(slug + '-')) return file
+  }
+  
+  // 4. Prefix match by filename
+  const prefixMatch = files.find((f) => f.startsWith(slug))
+  if (prefixMatch) return prefixMatch
   
   return null
 }

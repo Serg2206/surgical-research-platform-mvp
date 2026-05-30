@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Clock, Users, Calendar, ArrowLeft, BookOpen, ExternalLink } from 'lucide-react'
 import { getJournalArticle, getJournalSlugs } from '@/lib/journal'
 import { renderMarkdown } from '@/lib/markdown'
+import { generateJournalMeta, generateArticleJsonLd } from '@/lib/seo'
 
 interface JournalPageProps {
   params: {
@@ -22,28 +23,28 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
-// Generate metadata for SEO
+// Generate metadata for SEO — uses centralized generateJournalMeta
 export async function generateMetadata({ params }: JournalPageProps): Promise<Metadata> {
   const article = getJournalArticle(params.slug)
-  
+
   if (!article) {
-    return { title: 'Статья не найдена' }
+    return {
+      title: 'Статья не найдена',
+      description: 'Запрашиваемая статья не найдена в журнале.',
+      robots: { index: false, follow: false },
+    }
   }
 
-  return {
+  return generateJournalMeta({
     title: article.title,
-    description: article.abstract,
-    keywords: article.tags,
-    authors: article.authors.map((name) => ({ name })),
-    openGraph: {
-      title: article.title,
-      description: article.abstract,
-      type: 'article',
-      publishedTime: article.date,
-      authors: article.authors,
-      tags: article.tags,
-    },
-  }
+    slug: article.slug,
+    date: article.date,
+    authors: article.authors,
+    tags: article.tags,
+    abstract: article.abstract,
+    doi: article.doi,
+    readingTime: article.readingTime,
+  })
 }
 
 export default function JournalArticlePage({ params }: JournalPageProps) {
@@ -55,9 +56,27 @@ export default function JournalArticlePage({ params }: JournalPageProps) {
 
   const contentHtml = renderMarkdown(article.content)
 
+  // Build JSON-LD structured data
+  const jsonLd = generateArticleJsonLd({
+    title: article.title,
+    slug: article.slug,
+    date: article.date,
+    authors: article.authors,
+    tags: article.tags,
+    abstract: article.abstract,
+    doi: article.doi,
+    readingTime: article.readingTime,
+  })
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back link */}
