@@ -1,4 +1,4 @@
-# 🗺️ ROADMAP — SSVproff Surgical Research Platform
+# 🗺️ ROADMAP — SSVproff
 
 > **Правило:** Новые репозитории НЕ создаём. Вся разработка — в этом монорепо.
 

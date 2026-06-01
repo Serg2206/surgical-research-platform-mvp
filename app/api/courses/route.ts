@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { UserRole } from '@prisma/client'
+import { slugifyText } from '@/lib/slugs'
 
 export const dynamic = "force-dynamic"
 
@@ -127,11 +128,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const slug = title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '')
+    const slug = slugifyText(title)
 
     const course = await prisma.course.create({
       data: {

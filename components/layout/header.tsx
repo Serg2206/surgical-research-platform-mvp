@@ -18,8 +18,8 @@ function HeaderFallback() {
               <Stethoscope className="h-6 w-6 text-blue-600" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900">Surgical Research</h1>
-              <p className="text-xs text-gray-600">Platform</p>
+              <div className="text-lg font-bold text-gray-900">SSVproff</div>
+              <p className="text-xs text-gray-600">Образовательная платформа</p>
             </div>
           </Link>
           <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>

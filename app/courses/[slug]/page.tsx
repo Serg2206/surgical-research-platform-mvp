@@ -1,5 +1,6 @@
 
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/db'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
@@ -9,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import { BookOpen, Clock, User, PlayCircle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getDifficultyLabel, getDifficultyColor, formatDuration } from '@/lib/utils'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { resolveCourseSlug } from '@/lib/slugs'
 
 interface CoursePageProps {
   params: {
@@ -16,52 +19,140 @@ interface CoursePageProps {
   }
 }
 
-export default async function CoursePage({ params }: CoursePageProps) {
-  const course = await prisma.course.findUnique({
-    where: { slug: params.slug },
-    include: {
-      author: {
-        select: {
-          name: true,
-          fullName: true,
-          specialization: true
-        }
-      },
-      category: {
-        select: {
-          name: true,
-          color: true
-        }
-      },
-      lessons: {
-        orderBy: { order: 'asc' },
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          description: true,
-          duration: true,
-          order: true,
-          published: true
-        }
-      },
-      _count: {
-        select: {
-          enrollments: true
-        }
-      }
+const courseInclude = {
+  author: {
+    select: {
+      name: true,
+      fullName: true,
+      specialization: true
     }
+  },
+  category: {
+    select: {
+      name: true,
+      color: true
+    }
+  },
+  lessons: {
+    orderBy: { order: 'asc' as const },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      description: true,
+      duration: true,
+      order: true,
+      published: true
+    }
+  },
+  _count: {
+    select: {
+      enrollments: true
+    }
+  }
+}
+
+async function getCourseByRouteSlug(slug: string) {
+  const direct = await prisma.course.findUnique({
+    where: { slug },
+    include: courseInclude
   })
+
+  if (direct) return direct
+
+  const publishedCourses = await prisma.course.findMany({
+    where: { published: true },
+    include: courseInclude
+  })
+
+  return publishedCourses.find((course) => resolveCourseSlug(course) === slug) || null
+}
+
+export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
+  const course = await getCourseByRouteSlug(params.slug)
+
+  if (!course || !course.published) {
+    return {
+      title: 'Курс не найден',
+      description: 'Запрашиваемый курс SSVproff не найден.',
+      robots: { index: false, follow: false },
+    }
+  }
+
+  const canonicalUrl = `${SITE_URL}/courses/${resolveCourseSlug(course)}`
+  const description = course.shortDescription || course.description
+  const image = course.coverImage || DEFAULT_OG_IMAGE
+
+  return {
+    title: course.title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: course.title,
+      description,
+      type: 'website',
+      url: canonicalUrl,
+      siteName: SITE_NAME,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: course.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: course.title,
+      description,
+      images: [image],
+    },
+  }
+}
+
+export default async function CoursePage({ params }: CoursePageProps) {
+  const course = await getCourseByRouteSlug(params.slug)
 
   if (!course || !course.published) {
     notFound()
   }
 
+  const canonicalUrl = `${SITE_URL}/courses/${resolveCourseSlug(course)}`
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: course.title,
+    description: course.description,
+    url: canonicalUrl,
+    provider: {
+      '@type': 'Organization',
+      name: 'SSVproff',
+      sameAs: SITE_URL,
+    },
+    educationalLevel: getDifficultyLabel(course.difficulty),
+    inLanguage: 'ru',
+    offers: {
+      '@type': 'Offer',
+      price: course.price ?? 0,
+      priceCurrency: 'RUB',
+      availability: 'https://schema.org/InStock',
+      url: canonicalUrl,
+    },
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Course Content */}
           <div className="lg:col-span-2">
@@ -185,9 +276,10 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </Card>
           </div>
         </div>
-      </main>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   )
 }

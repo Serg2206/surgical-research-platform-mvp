@@ -21,8 +21,8 @@ import {
   Search, 
   BookOpen, 
   FileText, 
-  Database, 
-  MessageSquare,
+  Crown,
+  Info,
   Settings,
   LogOut,
   Menu,
@@ -54,8 +54,8 @@ export function ClientHeader({ onSearch }: ClientHeaderProps) {
   const navigation = [
     { name: 'Курсы', href: '/courses', icon: BookOpen },
     { name: 'Статьи', href: '/articles', icon: FileText },
-    { name: 'FHIR', href: '/fhir', icon: Database },
-    { name: 'AI Поиск', href: '/ai-search', icon: MessageSquare },
+    { name: 'Тарифы', href: '/pricing', icon: Crown },
+    { name: 'О платформе', href: '/about', icon: Info },
   ]
 
   const adminNavigation = session?.user?.role === 'ADMIN' ? [
@@ -72,10 +72,10 @@ export function ClientHeader({ onSearch }: ClientHeaderProps) {
             <Link href="/dashboard" className="flex items-center space-x-2">
               <div className="p-1 bg-blue-100 rounded-lg">
                 <Stethoscope className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg font-bold text-gray-900">Surgical Research</h1>
-                <p className="text-xs text-gray-600">Platform</p>
+            </div>
+            <div className="hidden sm:block">
+                <div className="text-lg font-bold text-gray-900">SSVproff</div>
+                <p className="text-xs text-gray-600">Образовательная платформа</p>
               </div>
             </Link>
             <div className="flex items-center space-x-4">
@@ -92,13 +92,13 @@ export function ClientHeader({ onSearch }: ClientHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="p-1 bg-blue-100 rounded-lg">
               <Stethoscope className="h-6 w-6 text-blue-600" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900">Surgical Research</h1>
-              <p className="text-xs text-gray-600">Platform</p>
+              <div className="text-lg font-bold text-gray-900">SSVproff</div>
+              <p className="text-xs text-gray-600">Образовательная платформа</p>
             </div>
           </Link>
 
@@ -206,6 +206,9 @@ export function ClientHeader({ onSearch }: ClientHeaderProps) {
             <Button
               variant="ghost"
               className="md:hidden"
+              aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -215,7 +218,7 @@ export function ClientHeader({ onSearch }: ClientHeaderProps) {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div id="mobile-navigation" className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <Link

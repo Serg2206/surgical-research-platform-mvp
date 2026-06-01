@@ -7,20 +7,21 @@ import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/components/providers/auth-provider"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://proffssv.site"
 
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Surgical Research Platform - Платформа хирургического образования",
-    template: "%s | Surgical Research Platform"
+    default: "SSVproff — образовательная платформа по хирургии",
+    template: "%s | SSVproff"
   },
-  description: "Современная платформа для хирургического образования и научных исследований. Курсы, статьи, AI-поиск и FHIR интеграция.",
-  keywords: ["хирургия", "медицинское образование", "научные исследования", "курсы", "FHIR"],
+  description: "SSVproff: курсы, статьи и научно-образовательные материалы по хирургии, неотложной абдоминальной хирургии и медицинским технологиям.",
+  keywords: ["SSVproff", "хирургия", "медицинское образование", "неотложная абдоминальная хирургия", "курсы"],
   authors: [{ name: "Prof. Sergey Sushkov" }],
-  creator: "Surgical Research Platform",
-  publisher: "Surgical Research Platform",
+  creator: "SSVproff",
+  publisher: "SSVproff",
   formatDetection: {
     email: false,
     address: false,
@@ -29,28 +30,31 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    url: "/",
-    title: "Surgical Research Platform - Платформа хирургического образования",
-    description: "Современная платформа для хирургического образования и научных исследований",
-    siteName: "Surgical Research Platform",
+    url: siteUrl,
+    title: "SSVproff — образовательная платформа по хирургии",
+    description: "Курсы, статьи и научно-образовательные материалы для профессионального развития хирургов.",
+    siteName: "SSVproff",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Surgical Research Platform"
+        alt: "SSVproff"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Surgical Research Platform - Платформа хирургического образования",
-    description: "Современная платформа для хирургического образования и научных исследований",
+    title: "SSVproff — образовательная платформа по хирургии",
+    description: "Курсы, статьи и научно-образовательные материалы для профессионального развития хирургов.",
     images: ["/og-image.png"]
   },
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
+  },
+  alternates: {
+    canonical: siteUrl,
   },
   robots: {
     index: true,

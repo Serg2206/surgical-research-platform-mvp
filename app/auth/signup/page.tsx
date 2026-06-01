@@ -7,11 +7,9 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2, Stethoscope, Mail, Lock, User, Building2, GraduationCap } from 'lucide-react'
-import { UserRole } from '@prisma/client'
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -19,7 +17,6 @@ export default function SignUpPage() {
     password: '',
     confirmPassword: '',
     fullName: '',
-    role: '' as UserRole | '',
     specialization: '',
     institution: '',
   })
@@ -39,10 +36,10 @@ export default function SignUpPage() {
       return
     }
 
-    if (formData.password.length < 6) {
+    if (formData.password.length < 8) {
       toast({
         title: 'Ошибка',
-        description: 'Пароль должен содержать минимум 6 символов',
+        description: 'Пароль должен содержать минимум 8 символов',
         variant: 'destructive',
       })
       return
@@ -60,7 +57,6 @@ export default function SignUpPage() {
           email: formData.email,
           password: formData.password,
           fullName: formData.fullName,
-          role: formData.role || 'STUDENT',
           specialization: formData.specialization,
           institution: formData.institution,
         }),
@@ -105,11 +101,11 @@ export default function SignUpPage() {
               <Stethoscope className="h-8 w-8 text-blue-600" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900">
             Создать аккаунт
-          </CardTitle>
+          </h1>
           <CardDescription className="text-gray-600">
-            Присоединяйтесь к Surgical Research Platform
+            Присоединяйтесь к SSVproff
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -124,6 +120,8 @@ export default function SignUpPage() {
                   placeholder="Иван Иванович Иванов"
                   value={formData.fullName}
                   onChange={(e) => updateFormData('fullName', e.target.value)}
+                  maxLength={120}
+                  autoComplete="name"
                   required
                   className="pl-10"
                 />
@@ -140,13 +138,15 @@ export default function SignUpPage() {
                   placeholder="your@email.com"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
+                  maxLength={254}
+                  autoComplete="email"
                   required
                   className="pl-10"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="password">Пароль</Label>
                 <div className="relative">
@@ -154,9 +154,12 @@ export default function SignUpPage() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Минимум 6 символов"
+                    placeholder="Минимум 8 символов"
                     value={formData.password}
                     onChange={(e) => updateFormData('password', e.target.value)}
+                    minLength={8}
+                    maxLength={128}
+                    autoComplete="new-password"
                     required
                     className="pl-10"
                   />
@@ -173,25 +176,14 @@ export default function SignUpPage() {
                     placeholder="Повторите пароль"
                     value={formData.confirmPassword}
                     onChange={(e) => updateFormData('confirmPassword', e.target.value)}
+                    minLength={8}
+                    maxLength={128}
+                    autoComplete="new-password"
                     required
                     className="pl-10"
                   />
                 </div>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="role">Роль</Label>
-              <Select onValueChange={(value) => updateFormData('role', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите вашу роль" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="STUDENT">Студент</SelectItem>
-                  <SelectItem value="TEACHER">Преподаватель</SelectItem>
-                  <SelectItem value="ADMIN">Администратор</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="space-y-2">
@@ -204,6 +196,7 @@ export default function SignUpPage() {
                   placeholder="Например: Кардиохирургия, Онкология"
                   value={formData.specialization}
                   onChange={(e) => updateFormData('specialization', e.target.value)}
+                  maxLength={120}
                   className="pl-10"
                 />
               </div>
@@ -219,6 +212,7 @@ export default function SignUpPage() {
                   placeholder="Название больницы или вуза"
                   value={formData.institution}
                   onChange={(e) => updateFormData('institution', e.target.value)}
+                  maxLength={160}
                   className="pl-10"
                 />
               </div>

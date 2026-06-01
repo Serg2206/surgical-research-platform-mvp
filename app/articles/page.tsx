@@ -1,6 +1,7 @@
 
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import type { Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,20 @@ import {
   Calendar
 } from 'lucide-react'
 import { formatDate, truncateText } from '@/lib/utils'
+
+export const metadata: Metadata = {
+  title: 'Статьи',
+  description: 'Статьи и публикации SSVproff по хирургии, медицинскому образованию и современным технологиям в медицине.',
+  alternates: {
+    canonical: '/articles',
+  },
+  openGraph: {
+    title: 'Статьи SSVproff',
+    description: 'Публикации по хирургии, медицинскому образованию и технологиям.',
+    url: '/articles',
+    type: 'website',
+  },
+}
 
 interface SearchParams {
   search?: string

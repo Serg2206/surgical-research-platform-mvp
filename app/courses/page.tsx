@@ -1,6 +1,7 @@
 
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import type { Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,21 @@ import {
   GraduationCap
 } from 'lucide-react'
 import { getDifficultyLabel, getDifficultyColor, formatDuration, formatDate } from '@/lib/utils'
+import { resolveCourseSlug } from '@/lib/slugs'
+
+export const metadata: Metadata = {
+  title: 'Курсы',
+  description: 'Каталог образовательных курсов SSVproff по хирургии, неотложной абдоминальной хирургии и медицинским технологиям.',
+  alternates: {
+    canonical: '/courses',
+  },
+  openGraph: {
+    title: 'Курсы SSVproff',
+    description: 'Профессиональные курсы для хирургов и медицинских специалистов.',
+    url: '/courses',
+    type: 'website',
+  },
+}
 
 interface SearchParams {
   search?: string
@@ -261,7 +277,7 @@ export default async function CoursesPage({
                       className="w-full bg-blue-600 hover:bg-blue-700" 
                       asChild
                     >
-                      <Link href={`/courses/${course.slug}`}>
+                      <Link href={`/courses/${resolveCourseSlug(course)}`}>
                         Изучать курс
                         <PlayCircle className="ml-2 h-4 w-4" />
                       </Link>

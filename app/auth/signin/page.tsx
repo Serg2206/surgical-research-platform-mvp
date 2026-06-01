@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2, Stethoscope, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
@@ -65,11 +65,11 @@ export default function SignInPage() {
               <Stethoscope className="h-8 w-8 text-blue-600" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900">
             Добро пожаловать
-          </CardTitle>
+          </h1>
           <CardDescription className="text-gray-600">
-            Войдите в Surgical Research Platform
+            Войдите в SSVproff
           </CardDescription>
         </CardHeader>
         <CardContent>

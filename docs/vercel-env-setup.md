@@ -7,7 +7,9 @@
 | Переменная | Значение | Описание |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | `https://proffssv.site` | Базовый URL сайта для canonical, OG, sitemap |
-| `NEXT_PUBLIC_TWITTER_HANDLE` | `@SaleemHamilah` | Twitter/X аккаунт для Twitter Card |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@proffssv.site` | Публичный email на странице контактов |
+| `NEXT_PUBLIC_TWITTER_HANDLE` | опционально | Twitter/X аккаунт для Twitter Card, если он есть |
+| `ABACUSAI_API_KEY` | секретное значение | Ключ для AI-поиска, не публикуется в клиентском коде |
 
 ## Как добавить в Vercel Dashboard
 
@@ -30,7 +32,8 @@
 ```env
 # SEO (обязательно для корректных мета-тегов)
 NEXT_PUBLIC_SITE_URL=https://proffssv.site
-NEXT_PUBLIC_TWITTER_HANDLE=@SaleemHamilah
+NEXT_PUBLIC_CONTACT_EMAIL=contact@proffssv.site
+# NEXT_PUBLIC_TWITTER_HANDLE=@your_account
 
 # NextAuth.js
 NEXTAUTH_SECRET=<ваш-секретный-ключ>
@@ -41,7 +44,16 @@ DATABASE_URL=postgresql://user:password@host:5432/surgical_platform?schema=publi
 
 # Приложение
 NEXT_PUBLIC_APP_URL=https://proffssv.site
+ABACUSAI_API_KEY=<ваш-abacusai-api-key>
 NODE_ENV=production
+```
+
+## После деплоя
+
+Один раз запустите скрипт исправления опубликованного контента, чтобы курс с пустым slug получил корректный URL:
+
+```bash
+npm run fix:content
 ```
 
 ## Проверка после настройки

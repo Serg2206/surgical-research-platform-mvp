@@ -235,12 +235,12 @@ async function main() {
 
     prisma.course.create({
       data: {
-        title: 'Экстренная абдоминальная хирургия',
-        slug: 'emergency-abdominal-surgery',
-        description: 'Комплексный курс по диагностике и лечению острых хирургических заболеваний органов брюшной полости.',
-        shortDescription: 'Диагностика и лечение острого живота',
+        title: 'Неотложная абдоминальная хирургия: от молекулы до решения',
+        slug: 'neotlozhnaya-abdominalnaya-hirurgiya-ot-molekuly-do-resheniya',
+        description: 'Авторский курс по диагностике, молекулярной логике шока и тактике решений в неотложной абдоминальной хирургии.',
+        shortDescription: 'От клеточной биологии шока до Damage Control Surgery 2.0',
         difficulty: Difficulty.ADVANCED,
-        duration: 12,
+        duration: 16,
         published: true,
         featured: true,
         authorId: teachers[1].id,

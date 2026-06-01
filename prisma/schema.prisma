@@ -1,5 +1,5 @@
-// Surgical Research Platform Database Schema
-// Medical education and research platform for Professor Sergey Sushkov
+// SSVproff database schema
+// Medical education and research platform
 
 generator client {
     provider = "prisma-client-js"

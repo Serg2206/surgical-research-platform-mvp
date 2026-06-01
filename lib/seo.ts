@@ -4,10 +4,10 @@ import type { Metadata } from 'next'
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://proffssv.site'
 
-const SITE_NAME = 'SSVproff Surgical Research Platform'
+const SITE_NAME = 'SSVproff'
 
 const TWITTER_HANDLE =
-  process.env.NEXT_PUBLIC_TWITTER_HANDLE || '@SaleemHamilah'
+  process.env.NEXT_PUBLIC_TWITTER_HANDLE || undefined
 
 const DEFAULT_LOCALE = 'ru_RU'
 
@@ -15,8 +15,8 @@ const DEFAULT_LOCALE = 'ru_RU'
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 const PUBLISHER = {
-  name: 'Витебский государственный медицинский университет',
-  department: 'Кафедра общей хирургии',
+  name: 'SSVproff',
+  department: 'Educational platform',
   url: SITE_URL,
 }
 
@@ -151,11 +151,15 @@ export function generateJournalMeta(data: JournalMetaInput): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      site: TWITTER_HANDLE,
-      creator: TWITTER_HANDLE,
       title: data.title,
       description,
       images: [ogImageUrl],
+      ...(TWITTER_HANDLE
+        ? {
+            site: TWITTER_HANDLE,
+            creator: TWITTER_HANDLE,
+          }
+        : {}),
     },
     robots: {
       index: true,

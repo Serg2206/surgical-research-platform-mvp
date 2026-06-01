@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { resolveCourseSlug } from '@/lib/slugs'
 
 export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,13 +20,69 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { query, context = 'search' } = body
+    const query = typeof body.query === 'string' ? body.query.trim() : ''
+    const context = typeof body.context === 'string' ? body.context.trim().slice(0, 80) : 'search'
 
-    if (!query) {
+    if (query.length < 2 || query.length > 300) {
       return NextResponse.json(
-        { error: 'Query is required' },
+        { error: 'Query must contain 2-300 characters' },
         { status: 400 }
       )
+    }
+
+    const apiKey = process.env.ABACUSAI_API_KEY
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'AI search is not configured' },
+        { status: 503 }
+      )
+    }
+
+    const [courses, articles] = await Promise.all([
+      prisma.course.findMany({
+        where: {
+          published: true,
+          OR: [
+            { title: { contains: query, mode: 'insensitive' } },
+            { description: { contains: query, mode: 'insensitive' } },
+          ]
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          category: { select: { name: true } },
+          author: { select: { name: true, fullName: true } }
+        },
+        take: 5
+      }),
+      prisma.article.findMany({
+        where: {
+          published: true,
+          OR: [
+            { title: { contains: query, mode: 'insensitive' } },
+            { excerpt: { contains: query, mode: 'insensitive' } },
+            { content: { contains: query, mode: 'insensitive' } },
+          ]
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          category: { select: { name: true } },
+          author: { select: { name: true, fullName: true } }
+        },
+        take: 5
+      })
+    ])
+
+    const searchResults = {
+      courses: courses.map((course) => ({
+        ...course,
+        slug: resolveCourseSlug(course),
+      })),
+      articles,
     }
 
     // Call LLM API for intelligent search
@@ -32,7 +90,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.ABACUSAI_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         model: 'gpt-4.1-mini',
@@ -86,44 +144,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Also search in our database for relevant content
-    const [courses, articles] = await Promise.all([
-      prisma.course.findMany({
-        where: {
-          published: true,
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } },
-          ]
-        },
-        include: {
-          category: { select: { name: true } },
-          author: { select: { name: true, fullName: true } }
-        },
-        take: 5
-      }),
-      prisma.article.findMany({
-        where: {
-          published: true,
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { content: { contains: query, mode: 'insensitive' } },
-          ]
-        },
-        include: {
-          category: { select: { name: true } },
-          author: { select: { name: true, fullName: true } }
-        },
-        take: 5
-      })
-    ])
-
     return new Response(stream, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        'X-Search-Results': JSON.stringify({ courses, articles })
+        'X-Search-Results': encodeURIComponent(JSON.stringify(searchResults))
       },
     })
 

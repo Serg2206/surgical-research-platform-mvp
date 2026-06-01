@@ -131,7 +131,7 @@ export function ClientAISearch() {
       const searchResultsHeader = response.headers.get('X-Search-Results')
       if (searchResultsHeader) {
         try {
-          setSearchResults(JSON.parse(searchResultsHeader))
+          setSearchResults(JSON.parse(decodeURIComponent(searchResultsHeader)))
         } catch (e) {
           console.error('Failed to parse search results:', e)
         }

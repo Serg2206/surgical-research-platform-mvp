@@ -5,6 +5,7 @@ import { authOptions } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Footer } from '@/components/layout/footer'
 import Link from 'next/link'
 import { 
   Stethoscope, 
@@ -12,8 +13,7 @@ import {
   FileText, 
   Database, 
   MessageSquare, 
-  Users,
-  TrendingUp,
+  ShieldCheck,
   Award,
   Zap,
   ArrowRight,
@@ -23,39 +23,39 @@ import {
 const features = [
   {
     name: 'Курсы по хирургии',
-    description: 'Структурированные курсы по различным хирургическим специальностям с видео-лекциями и интерактивными материалами',
+    description: 'Структурированные образовательные материалы по хирургии, клинической логике и тактике принятия решений',
     icon: BookOpen,
     color: 'text-blue-600 bg-blue-100',
     href: '/courses'
   },
   {
     name: 'Научные статьи',
-    description: 'База знаний с актуальными исследованиями и публикациями в области хирургии',
+    description: 'Публикации, обзоры и материалы для профессионального чтения без рекламного шума',
     icon: FileText,
     color: 'text-green-600 bg-green-100',
     href: '/articles'
   },
   {
     name: 'FHIR Интеграция',
-    description: 'Работа со стандартизированными медицинскими данными для исследований',
+    description: 'Инструменты для работы со стандартизированными медицинскими данными в исследовательских сценариях',
     icon: Database,
-    color: 'text-purple-600 bg-purple-100',
+    color: 'text-teal-600 bg-teal-100',
     href: '/fhir'
   },
   {
     name: 'AI Поиск и Анализ',
-    description: 'Интеллектуальный поиск и анализ медицинского контента с помощью ИИ',
+    description: 'Поиск и анализ медицинского контента с ответственным использованием ИИ',
     icon: MessageSquare,
-    color: 'text-orange-600 bg-orange-100',
+    color: 'text-amber-600 bg-amber-100',
     href: '/ai-search'
   }
 ]
 
 const stats = [
-  { name: 'Активных курсов', value: '50+', icon: BookOpen },
-  { name: 'Научных статей', value: '200+', icon: FileText },
-  { name: 'Студентов', value: '1000+', icon: Users },
-  { name: 'Экспертов', value: '25+', icon: Award },
+  { name: 'Курсы и модули', value: 'Обучение', icon: BookOpen },
+  { name: 'Статьи и обзоры', value: 'Знания', icon: FileText },
+  { name: 'Клиническая ответственность', value: 'Позиция', icon: ShieldCheck },
+  { name: 'Профессиональная экспертиза', value: 'Практика', icon: Award },
 ]
 
 export default async function HomePage() {
@@ -66,7 +66,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
       <header className="relative bg-white/80 backdrop-blur-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,8 +76,8 @@ export default async function HomePage() {
                 <Stethoscope className="h-8 w-8 text-blue-600" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Surgical Research</h1>
-                <p className="text-sm text-gray-600">Platform</p>
+                <div className="text-xl font-bold text-gray-900">SSVproff</div>
+                <p className="text-sm text-gray-600">Образовательная платформа</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -93,23 +93,22 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20">
+      <section className="relative py-16 sm:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-8">
             <div className="space-y-4">
               <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">
                 <Zap className="h-3 w-3 mr-1" />
-                Powered by AI & FHIR
+                AI, FHIR и клиническое мышление
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
-                Современная платформа для{' '}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  хирургического образования
-                </span>
+                SSVproff
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Изучайте хирургию с использованием передовых технологий AI, работайте с FHIR данными 
-                и получайте доступ к экспертным знаниям профессора Сергея Сушкова
+              <p className="text-2xl font-semibold text-gray-800 max-w-3xl mx-auto">
+                Платформа для хирургического образования, научных материалов и профессионального развития.
+              </p>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Курсы, статьи и инструменты для врачей, ординаторов и студентов, которым важны структура, клиническая логика и ответственность.
               </p>
             </div>
             
@@ -136,10 +135,10 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Доверяют профессионалы
+              Что уже собрано на платформе
             </h2>
             <p className="text-lg text-gray-600">
-              Платформа для медицинского образования нового поколения
+              Основные разделы SSVproff без неподтверждённых цифр и лишних обещаний
             </p>
           </div>
           
@@ -207,15 +206,14 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+      <section className="py-20 bg-blue-700">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Готовы начать обучение?
+              Начните с курсов и статей
             </h2>
             <p className="text-xl text-blue-100">
-              Присоединяйтесь к тысячам медицинских специалистов, которые используют 
-              нашу платформу для профессионального развития
+              Материалы платформы предназначены для профессионального обучения и не заменяют клинические протоколы, очную помощь и решение лечащего врача.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -242,26 +240,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center items-center space-x-2 mb-4">
-              <div className="p-1 bg-blue-100 rounded-lg">
-                <Stethoscope className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold">Surgical Research Platform</h3>
-            </div>
-            <p className="text-gray-400 mb-4">
-              Разработано для профессора Сергея Сушкова
-            </p>
-            <div className="flex justify-center items-center text-sm text-gray-500">
-              <TrendingUp className="h-4 w-4 mr-1" />
-              © 2024 MVP для хирургического образования и исследований
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
