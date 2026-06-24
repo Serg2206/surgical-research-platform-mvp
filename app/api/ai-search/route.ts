@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     ])
 
     const searchResults = {
-      courses: courses.map((course) => ({
+      courses: courses.map((course: { id: string; title: string; slug: string | null; category: { name: string } | null; author: { name: string; fullName: string } | null }) => ({
         ...course,
         slug: resolveCourseSlug(course),
       })),

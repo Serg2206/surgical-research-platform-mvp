@@ -21,6 +21,15 @@
 
 ---
 
+## Экосистема
+
+- [medical-research-repoNS](https://github.com/Serg2206/medical-research-repoNS) — Python-исследования, датасеты и скрипты анализа
+- [ssv-video](https://github.com/Serg2206/ssv-video) — автоматизированный генератор видеопакетов для SSVproff
+- [ssvproff-journal](https://github.com/Serg2206/ssvproff-journal) — хирургический журнал с AI-интеграцией
+- [ssvproff-website-content](https://github.com/Serg2206/ssvproff-website-content) — Markdown-источник сайта ssvnauka.com
+
+---
+
 ## Структура монорепо
 
 ```
