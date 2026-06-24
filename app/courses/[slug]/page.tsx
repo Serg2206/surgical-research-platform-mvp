@@ -224,7 +224,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 <div className="space-y-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-gray-900">
-                      {course.price === 0 ? 'Бесплатно' : `₽${course.price}`}
+                      {course.price === 0 ? 'Бесплатно' : `$${course.price}`}
                     </div>
                     <p className="text-sm text-gray-600">
                       {course._count.enrollments} студент{course._count.enrollments === 1 ? '' : (course._count.enrollments < 5 ? 'а' : 'ов')} записались
