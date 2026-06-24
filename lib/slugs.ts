@@ -47,6 +47,6 @@ export function slugifyText(value: string): string {
 }
 
 export function resolveCourseSlug(course: { slug?: string | null; title: string }): string {
-  const slug = course.slug?.trim();
-  return slug || slugifyText(course.title);
+  const slug = (course.slug ?? '').trim();
+  return slug ? slug : slugifyText(course.title);
 }

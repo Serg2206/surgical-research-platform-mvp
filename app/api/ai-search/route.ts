@@ -78,10 +78,13 @@ export async function POST(request: NextRequest) {
     ])
 
     const searchResults = {
-      courses: courses.map((course: { id: string; title: string; slug: string | null; category: { name: string } | null; author: { name: string; fullName: string } | null }) => ({
-        ...course,
-        slug: resolveCourseSlug(course),
-      })),
+      courses: courses.map((course) => {
+        const safeCourse = course ?? ({} as const);
+        return {
+          ...safeCourse,
+          slug: resolveCourseSlug(safeCourse as Parameters<typeof resolveCourseSlug>[0]),
+        };
+      }),
       articles,
     }
 
