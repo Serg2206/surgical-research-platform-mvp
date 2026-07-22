@@ -1,4 +1,5 @@
 
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
@@ -162,6 +163,12 @@ function FHIRContent() {
       </Tabs>
     </>
   )
+}
+
+export const metadata: Metadata = {
+  title: 'FHIR-интеграция',
+  description: 'Демонстрация работы со стандартизированными медицинскими данными в формате FHIR на платформе SSVproff.',
+  alternates: { canonical: '/fhir' },
 }
 
 export default function FHIRPage() {
