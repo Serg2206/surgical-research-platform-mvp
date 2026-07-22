@@ -84,6 +84,16 @@ const COURSE_MODULES = [
       { title: '7.4 Карциноматоз брюшины и экстренные ситуации', path: `${COURSE_BASE}/module-7/lecture-7-4.md` },
     ],
   },
+  {
+    title: 'Модуль 8. Грыжи и абдоминальная стенка в экстренной практике',
+    indexPath: `${COURSE_BASE}/module-8/index.md`,
+    lectures: [
+      { title: '8.1 Ущемлённые грыжи: WSES 2024', path: `${COURSE_BASE}/module-8/lecture-8-1.md` },
+      { title: '8.2 Послеоперационные вентральные грыжи с осложнениями', path: `${COURSE_BASE}/module-8/lecture-8-2.md` },
+      { title: '8.3 Open abdomen и реконструкция абдоминальной стенки', path: `${COURSE_BASE}/module-8/lecture-8-3.md` },
+      { title: '8.4 Абдоминальный компартмент-синдром', path: `${COURSE_BASE}/module-8/lecture-8-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
