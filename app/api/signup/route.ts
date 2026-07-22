@@ -3,11 +3,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db'
 import { UserRole } from '@prisma/client'
+import { isRateLimited } from '@/lib/rate-limit'
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const SIGNUP_LIMIT = 5
+const SIGNUP_WINDOW_MS = 60_000
 
 function cleanOptionalText(value: unknown, maxLength: number) {
   if (typeof value !== 'string') return null
@@ -17,6 +20,14 @@ function cleanOptionalText(value: unknown, maxLength: number) {
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    if (isRateLimited(`signup:${ip}`, SIGNUP_LIMIT, SIGNUP_WINDOW_MS)) {
+      return NextResponse.json(
+        { error: 'Слишком много попыток регистрации, попробуйте позже' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
     const password = typeof body.password === 'string' ? body.password : ''
