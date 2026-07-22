@@ -5,15 +5,40 @@ import { marked } from 'marked';
 import mermaid from 'mermaid';
 import lunr from 'lunr';
 
-const DOCS = [
+const BASE_DOCS = [
   { title: 'Введение', path: '/knowledge/data/intro.md' },
   { title: 'Острый аппендицит', path: '/knowledge/data/diseases/acute_appendicitis.md' },
   { title: 'Алгоритм лечения', path: '/knowledge/data/algorithms/appendicitis_flow.md' },
-  { title: 'Курс: Модуль 1 — обзор', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/index.md' },
-  { title: '1.1 Острый живот 2026: от семиотики к алгоритму', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-1.md' },
-  { title: '1.2 Damage Control Surgery: философия и физиология', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-2.md' },
-  { title: '1.3 Лапароскопия в экстренной хирургии', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-3.md' },
-  { title: '1.4 AI и клиническое мышление хирурга', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-4.md' },
+];
+
+const COURSE_BASE = '/knowledge/data/courses/abdominal-emergency-2026';
+
+const COURSE_MODULES = [
+  {
+    title: 'Модуль 1. Фундамент и система принятия решений',
+    indexPath: `${COURSE_BASE}/module-1/index.md`,
+    lectures: [
+      { title: '1.1 Острый живот 2026: от семиотики к алгоритму', path: `${COURSE_BASE}/module-1/lecture-1-1.md` },
+      { title: '1.2 Damage Control Surgery: философия и физиология', path: `${COURSE_BASE}/module-1/lecture-1-2.md` },
+      { title: '1.3 Лапароскопия в экстренной хирургии', path: `${COURSE_BASE}/module-1/lecture-1-3.md` },
+      { title: '1.4 AI и клиническое мышление хирурга', path: `${COURSE_BASE}/module-1/lecture-1-4.md` },
+    ],
+  },
+  {
+    title: 'Модуль 2. Перитонит и интраабдоминальный сепсис',
+    indexPath: `${COURSE_BASE}/module-2/index.md`,
+    lectures: [
+      { title: '2.1 Классификация и стратификация перитонита', path: `${COURSE_BASE}/module-2/lecture-2-1.md` },
+      { title: '2.2 Хирургическая тактика: source control', path: `${COURSE_BASE}/module-2/lecture-2-2.md` },
+      { title: '2.3 Антибиотикотерапия и антибиотикорезистентность', path: `${COURSE_BASE}/module-2/lecture-2-3.md` },
+      { title: '2.4 Третичный перитонит и абдоминальный сепсис в ОРИТ', path: `${COURSE_BASE}/module-2/lecture-2-4.md` },
+    ],
+  },
+];
+
+const DOCS = [
+  ...BASE_DOCS,
+  ...COURSE_MODULES.flatMap(m => [{ title: `${m.title} — обзор`, path: m.indexPath }, ...m.lectures]),
 ];
 
 export default function ClientKnowledge() {
@@ -68,6 +93,11 @@ export default function ClientKnowledge() {
     }
   };
 
+  const navButtonClass = (path: string) =>
+    `block w-full text-left px-3 py-2 rounded-lg text-sm ${
+      selectedPath === path ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'
+    }`;
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b">
@@ -84,18 +114,53 @@ export default function ClientKnowledge() {
       </div>
 
       <div className="flex-1 flex">
-        <nav className="w-64 border-r bg-white/60 p-4 space-y-2">
-          {DOCS.map(doc => (
-            <button
-              key={doc.path}
-              onClick={() => setSelectedPath(doc.path)}
-              className={`block w-full text-left px-3 py-2 rounded-lg ${
-                selectedPath === doc.path ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
+        <nav className="w-72 border-r bg-white/60 p-4 space-y-1 overflow-y-auto">
+          {BASE_DOCS.map(doc => (
+            <button key={doc.path} onClick={() => setSelectedPath(doc.path)} className={navButtonClass(doc.path)}>
               {doc.title}
             </button>
           ))}
+
+          {COURSE_MODULES.length > 0 && (
+            <div className="pt-3 mt-3 border-t">
+              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Курс «Абдоминальная неотложная хирургия — 2026»
+              </p>
+              {COURSE_MODULES.map(module => {
+                const isActiveModule =
+                  selectedPath === module.indexPath || module.lectures.some(l => l.path === selectedPath);
+                return (
+                  <details key={module.indexPath} open={isActiveModule} className="group">
+                    <summary className="cursor-pointer select-none list-none px-3 py-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-gray-100 flex items-center justify-between">
+                      <span
+                        className="truncate"
+                        role="button"
+                        tabIndex={0}
+                        onClick={e => {
+                          e.preventDefault();
+                          setSelectedPath(module.indexPath);
+                        }}
+                      >
+                        {module.title}
+                      </span>
+                      <span className="text-gray-400 transition-transform group-open:rotate-90">›</span>
+                    </summary>
+                    <div className="pl-3 space-y-1 pb-1">
+                      {module.lectures.map(lecture => (
+                        <button
+                          key={lecture.path}
+                          onClick={() => setSelectedPath(lecture.path)}
+                          className={navButtonClass(lecture.path)}
+                        >
+                          {lecture.title}
+                        </button>
+                      ))}
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
+          )}
         </nav>
 
         <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
