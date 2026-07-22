@@ -11,6 +11,7 @@
 
 - [Модуль 1. Фундамент и система принятия решений](/knowledge/data/courses/abdominal-emergency-2026/module-1/index.md)
 - [Модуль 2. Перитонит и интраабдоминальный сепсис](/knowledge/data/courses/abdominal-emergency-2026/module-2/index.md)
+- [Модуль 3. Острая кишечная непроходимость](/knowledge/data/courses/abdominal-emergency-2026/module-3/index.md)
 
 ## Использование
 Вводите в поисковую строку симптомы, диагнозы или ключевые слова (например: аппендицит, Пью, Мансон, ДАК).

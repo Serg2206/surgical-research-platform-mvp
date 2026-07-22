@@ -34,6 +34,16 @@ const COURSE_MODULES = [
       { title: '2.4 Третичный перитонит и абдоминальный сепсис в ОРИТ', path: `${COURSE_BASE}/module-2/lecture-2-4.md` },
     ],
   },
+  {
+    title: 'Модуль 3. Острая кишечная непроходимость',
+    indexPath: `${COURSE_BASE}/module-3/index.md`,
+    lectures: [
+      { title: '3.1 Диагностика и дифференциация ОКН', path: `${COURSE_BASE}/module-3/lecture-3-1.md` },
+      { title: '3.2 Спаечная непроходимость: консервативно vs. оперативно', path: `${COURSE_BASE}/module-3/lecture-3-2.md` },
+      { title: '3.3 Странгуляционная непроходимость и мезентериальная ишемия', path: `${COURSE_BASE}/module-3/lecture-3-3.md` },
+      { title: '3.4 Обтурационная непроходимость: опухоли, желчные камни', path: `${COURSE_BASE}/module-3/lecture-3-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
