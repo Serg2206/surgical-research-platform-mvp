@@ -74,6 +74,16 @@ const COURSE_MODULES = [
       { title: '6.4 Посттравматические повреждения паренхиматозных органов', path: `${COURSE_BASE}/module-6/lecture-6-4.md` },
     ],
   },
+  {
+    title: 'Модуль 7. Экстренная абдоминальная онкохирургия',
+    indexPath: `${COURSE_BASE}/module-7/index.md`,
+    lectures: [
+      { title: '7.1 Обтурационная непроходимость опухолевого генеза', path: `${COURSE_BASE}/module-7/lecture-7-1.md` },
+      { title: '7.2 Перфорация и кровотечение при опухолях ЖКТ', path: `${COURSE_BASE}/module-7/lecture-7-2.md` },
+      { title: '7.3 Острые осложнения после плановых онкоопераций', path: `${COURSE_BASE}/module-7/lecture-7-3.md` },
+      { title: '7.4 Карциноматоз брюшины и экстренные ситуации', path: `${COURSE_BASE}/module-7/lecture-7-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [

@@ -15,6 +15,7 @@
 - [Модуль 4. Острый аппендицит и дивертикулярная болезнь](/knowledge/data/courses/abdominal-emergency-2026/module-4/index.md)
 - [Модуль 5. Острые заболевания гепатопанкреатобилиарной зоны](/knowledge/data/courses/abdominal-emergency-2026/module-5/index.md)
 - [Модуль 6. Перфорации и кровотечения ЖКТ](/knowledge/data/courses/abdominal-emergency-2026/module-6/index.md)
+- [Модуль 7. Экстренная абдоминальная онкохирургия](/knowledge/data/courses/abdominal-emergency-2026/module-7/index.md)
 
 ## Использование
 Вводите в поисковую строку симптомы, диагнозы или ключевые слова (например: аппендицит, Пью, Мансон, ДАК).
