@@ -18,6 +18,7 @@
 - [Модуль 7. Экстренная абдоминальная онкохирургия](/knowledge/data/courses/abdominal-emergency-2026/module-7/index.md)
 - [Модуль 8. Грыжи и абдоминальная стенка в экстренной практике](/knowledge/data/courses/abdominal-emergency-2026/module-8/index.md)
 - [Модуль 9. Минимально инвазивные технологии в экстренной хирургии](/knowledge/data/courses/abdominal-emergency-2026/module-9/index.md)
+- [Модуль 10. Анестезиология, реанимация и ERAS в экстренной хирургии](/knowledge/data/courses/abdominal-emergency-2026/module-10/index.md)
 
 ## Использование
 Вводите в поисковую строку симптомы, диагнозы или ключевые слова (например: аппендицит, Пью, Мансон, ДАК).

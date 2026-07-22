@@ -104,6 +104,16 @@ const COURSE_MODULES = [
       { title: '9.4 Интраоперационная навигация, ICG-флуоресценция, 3D-печать', path: `${COURSE_BASE}/module-9/lecture-9-4.md` },
     ],
   },
+  {
+    title: 'Модуль 10. Анестезиология, реанимация и ERAS в экстренной хирургии',
+    indexPath: `${COURSE_BASE}/module-10/index.md`,
+    lectures: [
+      { title: '10.1 Анестезиологическое обеспечение экстренной операции', path: `${COURSE_BASE}/module-10/lecture-10-1.md` },
+      { title: '10.2 ERAS в экстренной хирургии: миф или реальность?', path: `${COURSE_BASE}/module-10/lecture-10-2.md` },
+      { title: '10.3 Сепсис и полиорганная недостаточность: хирург и реаниматолог', path: `${COURSE_BASE}/module-10/lecture-10-3.md` },
+      { title: '10.4 Послеоперационные осложнения и re-intervention', path: `${COURSE_BASE}/module-10/lecture-10-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
