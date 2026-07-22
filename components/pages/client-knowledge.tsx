@@ -36,7 +36,7 @@ export default function ClientKnowledge() {
 
   useEffect(() => {
     renderDoc(selectedPath).catch(console.error);
-  }, [selectedPath]);
+  }, [selectedPath, renderDoc]);
 
   useEffect(() => {
     fetch('/knowledge/data/search-index.json')

@@ -3,14 +3,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { UserRole } from '@prisma/client'
 
 export const dynamic = "force-dynamic"
+
+const FHIR_ROLES: UserRole[] = [UserRole.ADMIN, UserRole.TEACHER]
 
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
+
+    if (!session?.user || !FHIR_ROLES.includes(session.user.role)) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -19,6 +22,8 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const resourceType = searchParams.get('resourceType')
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 200)
 
     const where: any = {}
     if (resourceType) {
@@ -35,7 +40,9 @@ export async function GET(request: NextRequest) {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
     })
 
     return NextResponse.json(resources)
@@ -51,8 +58,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
+
+    if (!session?.user || !FHIR_ROLES.includes(session.user.role)) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

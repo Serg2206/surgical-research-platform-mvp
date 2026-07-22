@@ -4,6 +4,10 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { resolveCourseSlug } from '@/lib/slugs'
+import { isRateLimited } from '@/lib/rate-limit'
+
+const AI_SEARCH_LIMIT = 20
+const AI_SEARCH_WINDOW_MS = 60_000
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -16,6 +20,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      )
+    }
+
+    if (isRateLimited(session.user.id, AI_SEARCH_LIMIT, AI_SEARCH_WINDOW_MS)) {
+      return NextResponse.json(
+        { error: 'Too many search requests, please slow down' },
+        { status: 429 }
       )
     }
 

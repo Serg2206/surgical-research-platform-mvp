@@ -10,9 +10,12 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   async headers() {
+    const isDev = process.env.NODE_ENV !== 'production'
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apps.abacus.ai",
+      // 'unsafe-eval' is only needed for Next.js dev-mode HMR; the Abacus AI
+      // call in /api/ai-search happens server-side and doesn't need it.
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://apps.abacus.ai`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://cdn.abacus.ai",
       "font-src 'self' data:",
