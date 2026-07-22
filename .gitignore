@@ -59,3 +59,4 @@ prisma/migrations
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.env*
