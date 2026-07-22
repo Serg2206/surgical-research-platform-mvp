@@ -30,19 +30,31 @@
 
 ---
 
-## Структура монорепо
+## Структура репозитория
 
 ```
-/api          # Backend API (FastAPI или Next.js API routes)
-/web          # Frontend Next.js static export
-/ai           # ML-модели прогноза риска
-/tools        # Утилиты (video, book, monetization generators)
-/flows        # Рабочие процессы и автоматизации
-/data-meta    # Метаданные, схемы, миграции
+/app          # Next.js App Router: страницы и API-роуты (app/api/*)
+/components   # React-компоненты (UI, layout, страницы)
+/lib          # Общий код: auth, prisma-клиент, rate-limit, slugs и т.д.
+/prisma       # Схема базы данных
+/content      # Markdown-контент
+/public       # Статические файлы
+/scripts      # Служебные скрипты (seed, fix-content)
 /docs         # Документация
+/metadata     # Метаданные контента
+/types        # Общие TypeScript-типы
+/hooks        # Общие React-хуки
 ```
 
 ---
+
+## AI-поиск
+
+`/api/ai-search` вызывает внешний прокси **Abacus.ai** (`https://apps.abacus.ai/v1/chat/completions`, модель `gpt-4.1-mini`), а не OpenAI/Anthropic напрямую — проект изначально был собран в app-builder'е Abacus.ai, отсюда и эта зависимость, и файл `.abacus.donotdelete` в корне репозитория (служебный артефакт платформы, не трогать). Нужен ключ `ABACUSAI_API_KEY` (см. `.env.production.example`) — это ключ именно платформы Abacus.ai, а не сторонней LLM напрямую. Без него `/api/ai-search` отвечает 503, остальной сайт работает нормально.
+
+Поиск по курсам/статьям (`Prisma` `contains`-запрос) и поиск по `/knowledge` (клиентский индекс Lunr.js) — две независимые системы, не объединены; это известное ограничение, а не недосмотр.
+
+**Известное ограничение производительности:** `contains`-поиск по курсам/статьям (`app/api/ai-search`, `app/api/courses`) сейчас идёт полным сканированием — обычный B-tree `@@index` в Postgres не ускоряет LIKE `%term%`. Для реального ускорения нужен `pg_trgm` (GIN-индекс по триграммам) или `tsvector` полнотекстовый индекс — это отдельная миграция БД, которую нужно применять и проверять на живой базе (Neon/Supabase), а не вслепую из кода.
 
 ## Быстрый старт
 

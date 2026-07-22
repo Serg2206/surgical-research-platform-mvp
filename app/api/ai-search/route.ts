@@ -99,7 +99,8 @@ export async function POST(request: NextRequest) {
       articles,
     }
 
-    // Call LLM API for intelligent search
+    // Abacus.ai platform proxy (the app-builder this project originated on),
+    // not a direct OpenAI/Anthropic call — see README "AI-поиск".
     const response = await fetch('https://apps.abacus.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
