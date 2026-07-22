@@ -94,6 +94,16 @@ const COURSE_MODULES = [
       { title: '8.4 Абдоминальный компартмент-синдром', path: `${COURSE_BASE}/module-8/lecture-8-4.md` },
     ],
   },
+  {
+    title: 'Модуль 9. Минимально инвазивные технологии в экстренной хирургии',
+    indexPath: `${COURSE_BASE}/module-9/index.md`,
+    lectures: [
+      { title: '9.1 Лапароскопическая экстренная хирургия: доказательная база 2026', path: `${COURSE_BASE}/module-9/lecture-9-1.md` },
+      { title: '9.2 Робот-ассистированная экстренная хирургия', path: `${COURSE_BASE}/module-9/lecture-9-2.md` },
+      { title: '9.3 Интервенционная радиология как партнёр хирурга', path: `${COURSE_BASE}/module-9/lecture-9-3.md` },
+      { title: '9.4 Интраоперационная навигация, ICG-флуоресценция, 3D-печать', path: `${COURSE_BASE}/module-9/lecture-9-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
