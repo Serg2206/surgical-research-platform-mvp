@@ -64,6 +64,16 @@ const COURSE_MODULES = [
       { title: '5.4 Кровотечения из ВРВ и портальная гипертензия', path: `${COURSE_BASE}/module-5/lecture-5-4.md` },
     ],
   },
+  {
+    title: 'Модуль 6. Перфорации и кровотечения ЖКТ',
+    indexPath: `${COURSE_BASE}/module-6/index.md`,
+    lectures: [
+      { title: '6.1 Перфоративная язва желудка и ДПК', path: `${COURSE_BASE}/module-6/lecture-6-1.md` },
+      { title: '6.2 Перфорации толстой кишки: опухоли, дивертикулы, ятрогенные', path: `${COURSE_BASE}/module-6/lecture-6-2.md` },
+      { title: '6.3 Желудочно-кишечные кровотечения: алгоритм 2026', path: `${COURSE_BASE}/module-6/lecture-6-3.md` },
+      { title: '6.4 Посттравматические повреждения паренхиматозных органов', path: `${COURSE_BASE}/module-6/lecture-6-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
