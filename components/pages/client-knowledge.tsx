@@ -9,6 +9,11 @@ const DOCS = [
   { title: 'Введение', path: '/knowledge/data/intro.md' },
   { title: 'Острый аппендицит', path: '/knowledge/data/diseases/acute_appendicitis.md' },
   { title: 'Алгоритм лечения', path: '/knowledge/data/algorithms/appendicitis_flow.md' },
+  { title: 'Курс: Модуль 1 — обзор', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/index.md' },
+  { title: '1.1 Острый живот 2026: от семиотики к алгоритму', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-1.md' },
+  { title: '1.2 Damage Control Surgery: философия и физиология', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-2.md' },
+  { title: '1.3 Лапароскопия в экстренной хирургии', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-3.md' },
+  { title: '1.4 AI и клиническое мышление хирурга', path: '/knowledge/data/courses/abdominal-emergency-2026/module-1/lecture-1-4.md' },
 ];
 
 export default function ClientKnowledge() {
