@@ -54,6 +54,16 @@ const COURSE_MODULES = [
       { title: '4.4 Перфорация толстой кишки неясной этиологии', path: `${COURSE_BASE}/module-4/lecture-4-4.md` },
     ],
   },
+  {
+    title: 'Модуль 5. Острые заболевания гепатопанкреатобилиарной зоны',
+    indexPath: `${COURSE_BASE}/module-5/index.md`,
+    lectures: [
+      { title: '5.1 Острый холецистит: Tokyo Guidelines 2024 + WSES', path: `${COURSE_BASE}/module-5/lecture-5-1.md` },
+      { title: '5.2 Холедохолитиаз и холангит в экстренной практике', path: `${COURSE_BASE}/module-5/lecture-5-2.md` },
+      { title: '5.3 Острый панкреатит: хирургический тайминг', path: `${COURSE_BASE}/module-5/lecture-5-3.md` },
+      { title: '5.4 Кровотечения из ВРВ и портальная гипертензия', path: `${COURSE_BASE}/module-5/lecture-5-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [

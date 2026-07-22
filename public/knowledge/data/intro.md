@@ -13,6 +13,7 @@
 - [Модуль 2. Перитонит и интраабдоминальный сепсис](/knowledge/data/courses/abdominal-emergency-2026/module-2/index.md)
 - [Модуль 3. Острая кишечная непроходимость](/knowledge/data/courses/abdominal-emergency-2026/module-3/index.md)
 - [Модуль 4. Острый аппендицит и дивертикулярная болезнь](/knowledge/data/courses/abdominal-emergency-2026/module-4/index.md)
+- [Модуль 5. Острые заболевания гепатопанкреатобилиарной зоны](/knowledge/data/courses/abdominal-emergency-2026/module-5/index.md)
 
 ## Использование
 Вводите в поисковую строку симптомы, диагнозы или ключевые слова (например: аппендицит, Пью, Мансон, ДАК).
