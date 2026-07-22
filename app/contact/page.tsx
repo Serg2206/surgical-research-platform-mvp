@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { StaticInfoPage } from '@/components/pages/static-info-page';
 
-const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@proffssv.site';
+const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@ssvnauka.com';
 
 export const metadata: Metadata = {
   title: 'Контакты',
