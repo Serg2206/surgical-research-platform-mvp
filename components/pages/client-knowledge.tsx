@@ -44,6 +44,16 @@ const COURSE_MODULES = [
       { title: '3.4 Обтурационная непроходимость: опухоли, желчные камни', path: `${COURSE_BASE}/module-3/lecture-3-4.md` },
     ],
   },
+  {
+    title: 'Модуль 4. Острый аппендицит и дивертикулярная болезнь',
+    indexPath: `${COURSE_BASE}/module-4/index.md`,
+    lectures: [
+      { title: '4.1 Острый аппендицит: от антибиотиков к хирургии', path: `${COURSE_BASE}/module-4/lecture-4-1.md` },
+      { title: '4.2 Осложнённый аппендицит: абсцесс, перитонит, флегмона', path: `${COURSE_BASE}/module-4/lecture-4-2.md` },
+      { title: '4.3 Острый дивертикулит: Hinchey и beyond', path: `${COURSE_BASE}/module-4/lecture-4-3.md` },
+      { title: '4.4 Перфорация толстой кишки неясной этиологии', path: `${COURSE_BASE}/module-4/lecture-4-4.md` },
+    ],
+  },
 ];
 
 const DOCS = [
