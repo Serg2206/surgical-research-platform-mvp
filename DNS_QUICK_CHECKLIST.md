@@ -19,11 +19,12 @@ Vercel Dashboard → Settings → Domains → Add:
 ## 3. Регистратор: создать записи
 
 ```
-A     @     → 76.76.21.21           TTL: 300
-CNAME www   → cname.vercel-dns.com  TTL: 300
+A     @     → 76.76.21.21                          TTL: 300
+CNAME www   → 85729bb29bbfbe89.vercel-dns-017.com. TTL: 300
 ```
 
 > Если есть старые A/CNAME для `@` или `www` — удалить перед добавлением.
+> Для текущего переноса удалить старые A-записи `@` → `185.199.108.153` и `@` → `185.199.109.153`.
 
 ## 4. Проверка DNS
 
@@ -33,7 +34,7 @@ CNAME www   → cname.vercel-dns.com  TTL: 300
 
 # Или вручную:
 dig proffssv.site +short          # → 76.76.21.21
-dig www.proffssv.site +short      # → cname.vercel-dns.com.
+dig www.proffssv.site +short      # → 85729bb29bbfbe89.vercel-dns-017.com.
 nslookup proffssv.site
 ```
 

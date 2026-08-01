@@ -10,6 +10,7 @@
 | `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@proffssv.site` | Публичный email на странице контактов |
 | `NEXT_PUBLIC_TWITTER_HANDLE` | опционально | Twitter/X аккаунт для Twitter Card, если он есть |
 | `ABACUSAI_API_KEY` | секретное значение | Ключ для AI-поиска, не публикуется в клиентском коде |
+| `ANTHROPIC_API_KEY` | секретное значение | Ключ Claude/Anthropic для серверных AI-функций, не публикуется в клиентском коде |
 
 ## Как добавить в Vercel Dashboard
 
@@ -45,6 +46,7 @@ DATABASE_URL=postgresql://user:password@host:5432/surgical_platform?schema=publi
 # Приложение
 NEXT_PUBLIC_APP_URL=https://proffssv.site
 ABACUSAI_API_KEY=<ваш-abacusai-api-key>
+ANTHROPIC_API_KEY=<ваш-anthropic-api-key>
 NODE_ENV=production
 ```
 
