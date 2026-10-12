@@ -1,5 +1,7 @@
 # 🏥 SSVproff
 
+[![CI](https://github.com/Serg2206/surgical-research-platform-mvp/actions/workflows/ci.yml/badge.svg)](https://github.com/Serg2206/surgical-research-platform-mvp/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > **Канонический репозиторий** образовательной платформы SSVproff.
 > Новые репозитории НЕ создаём — вся разработка идёт здесь.
 
@@ -77,7 +79,7 @@ npm run dev
 
 ## Лицензия
 
-MIT © 2024–2026 Prof. Shapovalov V.V. (SSVproff)
+MIT © 2024–2026 Sergiy V. Sushkov (SSVproff)
 
 ---
 
